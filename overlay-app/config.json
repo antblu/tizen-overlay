@@ -1,0 +1,13 @@
+{
+  "readUrl": "",
+  "authHeader": "Authorization",
+  "authScheme": "Bearer",
+  "pollIntervalMs": 2000,
+  "maxBackoffMs": 30000,
+  "requestTimeoutMs": 8000,
+  "staleAfterMs": 30000,
+  "maxTextChars": 8192,
+  "panelPosition": "top-right",
+  "panelSize": "medium",
+  "allowHttp": false
+}

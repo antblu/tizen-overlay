@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>G65B LLM Overlay</title>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+    <!-- Borderless translucent panel showing only the LLM text output -->
+    <aside id="overlay-panel" class="overlay-panel pos-top-right size-medium hidden" aria-live="polite">
+        <main id="response-scroll" class="response-scroll">
+            <pre id="response-text" class="response-text"></pre>
+        </main>
+    </aside>
+
+    <!-- Settings drawer: inputs only become editable on explicit click -->
+    <section id="settings-drawer" class="settings-drawer hidden" role="dialog" aria-label="Settings">
+        <div class="settings-card">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button type="button" id="btn-close-settings" class="icon-btn">Close</button>
+            </div>
+
+            <div class="form-grid" id="settings-fields">
+                <div class="field-item" data-field="readUrl" data-type="url" data-placeholder="http://host:port">
+                    <button type="button" class="field-trigger">
+                        <span class="field-label">URL</span>
+                        <span class="field-value" id="val-read-url">Not set</span>
+                    </button>
+                </div>
+
+                <div class="field-item" data-field="readToken" data-type="password" data-placeholder="Token">
+                    <button type="button" class="field-trigger">
+                        <span class="field-label">Token</span>
+                        <span class="field-value" id="val-read-token">None</span>
+                    </button>
+                </div>
+
+                <div class="field-item" data-field="authHeader" data-type="text" data-placeholder="Authorization">
+                    <button type="button" class="field-trigger">
+                        <span class="field-label">Header</span>
+                        <span class="field-value" id="val-auth-header">Authorization</span>
+                    </button>
+                </div>
+
+                <div class="field-item" data-field="authScheme" data-type="text" data-placeholder="Bearer">
+                    <button type="button" class="field-trigger">
+                        <span class="field-label">Scheme</span>
+                        <span class="field-value" id="val-auth-scheme">Bearer</span>
+                    </button>
+                </div>
+
+                <div class="field-item" data-field="pollIntervalMs" data-type="number" data-placeholder="2000">
+                    <button type="button" class="field-trigger">
+                        <span class="field-label">Poll (ms)</span>
+                        <span class="field-value" id="val-poll-ms">2000</span>
+                    </button>
+                </div>
+
+                <div class="field-item" data-field="staleAfterMs" data-type="number" data-placeholder="30000">
+                    <button type="button" class="field-trigger">
+                        <span class="field-label">Stale (ms)</span>
+                        <span class="field-value" id="val-stale-ms">30000</span>
+                    </button>
+                </div>
+
+                <button type="button" class="field-trigger" id="btn-cycle-position">
+                    <span class="field-label">Position</span>
+                    <span class="field-value" id="val-position">Top Right</span>
+                </button>
+
+                <button type="button" class="field-trigger" id="btn-cycle-size">
+                    <span class="field-label">Size</span>
+                    <span class="field-value" id="val-size">Medium</span>
+                </button>
+
+                <button type="button" class="field-trigger" id="btn-cycle-opacity">
+                    <span class="field-label">Opacity</span>
+                    <span class="field-value" id="val-opacity">78%</span>
+                </button>
+
+                <button type="button" class="field-trigger" id="btn-toggle-http">
+                    <span class="field-label">Allow HTTP</span>
+                    <span class="field-value" id="val-allow-http">Off</span>
+                </button>
+            </div>
+
+            <div id="settings-diag" class="settings-diag"></div>
+
+            <div class="settings-actions">
+                <button type="button" id="btn-save-settings" class="btn-primary">Save</button>
+                <button type="button" id="btn-test-fetch" class="btn-secondary">Test</button>
+                <button type="button" id="btn-exit-app" class="btn-danger">Exit</button>
+            </div>
+
+            <p class="settings-hint">
+                Click a field to edit &bull; <strong>0 / Enter</strong> Toggle &bull;
+                <strong>Up / 1 / S / Menu</strong> Settings &bull; <strong>Return</strong> Close / Exit
+            </p>
+        </div>
+    </section>
+
+    <script src="js/poller.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

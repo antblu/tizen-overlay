@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>G65B DisplayPort Overlay Test</title>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+    <!-- Fixed top-left label: always visible even in Compact Mode -->
+    <div id="fixed-label" class="fixed-label">
+        <div class="label-title">G65B OVERLAY TEST (BEHIND)</div>
+        <div id="label-status" class="label-sub">Initializing...</div>
+    </div>
+
+    <!-- Interactive diagnostic HUD (can be hidden with button 6 or key '0') -->
+    <div id="hud" class="hud">
+        <div class="hud-header">
+            <div>
+                <h1>DisplayPort &amp; TVWindow Diagnostic</h1>
+                <p id="env-info" class="muted">Checking Tizen APIs...</p>
+            </div>
+            <div class="hint">
+                Remote: Arrows + Enter &bull; Keys 1-7 &bull; 0 = Toggle HUD &bull; Return = Exit
+            </div>
+        </div>
+
+        <div class="hud-grid">
+            <section class="panel">
+                <h2>1. Actions</h2>
+                <div id="action-buttons" class="btn-list">
+                    <button type="button" class="btn" data-action="show-pct" data-key="1">
+                        [1] Show MAIN BEHIND (0%, 0%, 100%, 100%)
+                    </button>
+                    <button type="button" class="btn" data-action="show-1080p" data-key="2">
+                        [2] Show MAIN BEHIND (0px, 0px, 1920px, 1080px)
+                    </button>
+                    <button type="button" class="btn" data-action="show-1440p" data-key="3">
+                        [3] Show MAIN BEHIND (0px, 0px, 2560px, 1440px)
+                    </button>
+                    <button type="button" class="btn" data-action="hide-main" data-key="4">
+                        [4] Hide MAIN Window
+                    </button>
+                    <button type="button" class="btn" data-action="refresh" data-key="5">
+                        [5] Refresh getSource() &amp; VIDEOSOURCE
+                    </button>
+                    <button type="button" class="btn" data-action="save-baseline" data-key="6">
+                        [6] Save VIDEOSOURCE Baseline Snapshot
+                    </button>
+                    <button type="button" class="btn" data-action="clear-baseline">
+                        Clear Saved Baseline
+                    </button>
+                    <button type="button" class="btn" data-action="toggle-hud" data-key="0">
+                        [0] Compact Mode (Fixed Label Only)
+                    </button>
+                    <button type="button" class="btn btn-danger" data-action="exit" data-key="7">
+                        [7] Exit App (or press Return)
+                    </button>
+                </div>
+
+                <h2>2. TVWindow API Support</h2>
+                <pre id="support-box" class="code-box">Checking...</pre>
+
+                <h2>3. Current MAIN Source</h2>
+                <pre id="main-source-box" class="code-box">Pending...</pre>
+            </section>
+
+            <section class="panel">
+                <h2>3. VIDEOSOURCE Entries (Select to call setSource)</h2>
+                <div id="source-buttons" class="btn-list">
+                    <div class="muted">Querying VIDEOSOURCE...</div>
+                </div>
+
+                <h2>4. Baseline Diff (Connected / Disconnected)</h2>
+                <pre id="diff-box" class="code-box">No baseline saved yet. Press [6] with DisplayPort connected, then unplug/replug and press [5].</pre>
+
+                <h2>5. Raw VIDEOSOURCE JSON</h2>
+                <pre id="raw-sources-box" class="code-box">Pending...</pre>
+            </section>
+        </div>
+
+        <section class="panel log-panel">
+            <h2>6. Event Log</h2>
+            <pre id="log-box" class="code-box log-box"></pre>
+        </section>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -6,6 +6,8 @@
     var POSITIONS = [
         { value: "top-right", label: "Top Right" },
         { value: "top-left", label: "Top Left" },
+        { value: "center", label: "Middle" },
+        { value: "middle-left", label: "Middle Left" },
         { value: "bottom-right", label: "Bottom Right" },
         { value: "bottom-center", label: "Bottom Middle" },
         { value: "bottom-left", label: "Bottom Left" }
@@ -278,11 +280,11 @@
                 if (!resp.ok) {
                     throw new Error("HTTP " + resp.status);
                 }
-                return resp.json();
+                return resp.text();
             })
-            .then(function (jsonData) {
-                var parsed = window.OverlayPoller.parseLatestPayload(jsonData, state.config.maxTextChars);
-                el.settingsDiag.textContent = "OK: id=" + parsed.id + " (" + parsed.text.length + " chars)";
+            .then(function (rawBody) {
+                var parsed = window.OverlayPoller.parseResponseText(rawBody, state.config.maxTextChars);
+                el.settingsDiag.textContent = "OK: " + (parsed.text ? parsed.text.slice(0, 60) : "(empty)");
             })
             .catch(function (err) {
                 el.settingsDiag.textContent = "Failed: " + (err && err.message ? err.message : String(err));

@@ -27,32 +27,79 @@
         }
     }
 
-    function parseLatestPayload(data, maxTextChars) {
+    function truncateText(text, maxTextChars) {
         var limit = typeof maxTextChars === "number" && maxTextChars > 0
             ? maxTextChars
             : DEFAULT_MAX_TEXT_CHARS;
+        if (text.length > limit) {
+            return {
+                text: text.slice(0, limit) + "\n\n[truncated]",
+                truncated: true
+            };
+        }
+        return { text: text, truncated: false };
+    }
 
+    function firstStringField(obj, keys) {
+        var i;
+        for (i = 0; i < keys.length; i++) {
+            if (typeof obj[keys[i]] === "string") {
+                return obj[keys[i]];
+            }
+        }
+        return null;
+    }
+
+    function parseLatestPayload(data, maxTextChars) {
         if (!data || typeof data !== "object" || Array.isArray(data)) {
             throw new Error("Response JSON must be an object");
         }
-        if (typeof data.id !== "string" || !data.id.trim()) {
-            throw new Error("Missing non-empty string field 'id'");
+        var text = firstStringField(data, ["text", "answer_text", "answer", "response", "content"]);
+        if (text === null) {
+            // Allow pending/empty jobs (e.g. answer_text: null) without erroring.
+            text = "";
         }
-        if (typeof data.text !== "string") {
-            throw new Error("Missing string field 'text'");
-        }
-        var updatedAt = typeof data.updatedAt === "string" ? data.updatedAt.trim() : "";
-        var text = data.text;
-        var truncated = false;
-        if (text.length > limit) {
-            text = text.slice(0, limit) + "\n\n[truncated]";
-            truncated = true;
-        }
+        var id = typeof data.id === "string" && data.id.trim()
+            ? data.id.trim()
+            : ("txt:" + text);
+        var updatedAt = firstStringField(data, ["updatedAt", "completed_at", "detected_at"]);
+        var bounded = truncateText(text, maxTextChars);
         return {
-            id: data.id.trim(),
-            text: text,
-            updatedAt: updatedAt,
-            truncated: truncated
+            id: id,
+            text: bounded.text,
+            updatedAt: updatedAt ? updatedAt.trim() : "",
+            truncated: bounded.truncated
+        };
+    }
+
+    function parseResponseText(rawBody, maxTextChars) {
+        if (typeof rawBody !== "string") {
+            throw new Error("Empty response body");
+        }
+        try {
+            var parsed = JSON.parse(rawBody);
+            if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+                return parseLatestPayload(parsed, maxTextChars);
+            }
+            if (typeof parsed === "string") {
+                var boundedJsonStr = truncateText(parsed, maxTextChars);
+                return {
+                    id: "txt:" + boundedJsonStr.text,
+                    text: boundedJsonStr.text,
+                    updatedAt: "",
+                    truncated: boundedJsonStr.truncated
+                };
+            }
+        } catch (e) {
+            // Fall through to plain-text handling (e.g. GET / returning "env").
+        }
+        var trimmed = rawBody.trim();
+        var boundedPlain = truncateText(trimmed, maxTextChars);
+        return {
+            id: "txt:" + boundedPlain.text,
+            text: boundedPlain.text,
+            updatedAt: "",
+            truncated: boundedPlain.truncated
         };
     }
 
@@ -190,10 +237,10 @@
                     if (!resp.ok) {
                         throw new Error("HTTP " + resp.status);
                     }
-                    return resp.json();
+                    return resp.text();
                 })
-                .then(function (jsonData) {
-                    var parsed = parseLatestPayload(jsonData, opts.maxTextChars);
+                .then(function (rawBody) {
+                    var parsed = parseResponseText(rawBody, opts.maxTextChars);
                     consecutiveFailures = 0;
                     lastError = "";
 
@@ -282,6 +329,7 @@
         DEFAULT_MAX_TEXT_CHARS: DEFAULT_MAX_TEXT_CHARS,
         isAllowedReadUrl: isAllowedReadUrl,
         parseLatestPayload: parseLatestPayload,
+        parseResponseText: parseResponseText,
         computeBackoffMs: computeBackoffMs,
         computeIsStale: computeIsStale,
         createPoller: createPoller

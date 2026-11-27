@@ -81,6 +81,18 @@ body {
     left: 10vw;
 }
 
+.pos-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pos-middle-left {
+    top: 50%;
+    left: 10vw;
+    transform: translateY(-50%);
+}
+
 .pos-bottom-right {
     bottom: 12vh;
     right: 10vw;

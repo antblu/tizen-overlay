@@ -4,14 +4,14 @@ Tizen TV Web applications, packaging tools, and an authenticated relay server fo
 
 ## Repository Layout
 
-- [test-app/](file:///home/antblu/Github/tizen-overlay/test-app) — **Step 1** minimal diagnostic Tizen TV Web app (`tv.window` + `VIDEOSOURCE` inspector) to verify live DisplayPort (or HDMI) `MAIN` `BEHIND` video and mode preservation before running the full overlay.
-- [overlay-app/](file:///home/antblu/Github/tizen-overlay/overlay-app) — **Steps 2 & 3** transparent Tizen TV Web overlay app with configurable HTTPS read URL, read-only bearer credential, 2-second polling with duplicate-ID skip, exponential backoff, stale banner, plain-text wrapping, remote toggle, and clean `Return` exit.
-- [server/relay_server.py](file:///home/antblu/Github/tizen-overlay/server/relay_server.py) — Small authenticated HTTPS relay endpoint (`GET /latest` with read-only token, `POST /publish` with producer token, CORS + `Cache-Control: no-store`).
-- [tests/test_relay_server.py](file:///home/antblu/Github/tizen-overlay/tests/test_relay_server.py) — Unit & TLS integration tests for `relay_server.py`.
-- [scripts/package-app.ps1](file:///home/antblu/Github/tizen-overlay/scripts/package-app.ps1) — PowerShell helper to build, sign, install, and launch either `test-app` or `overlay-app` via Tizen Studio CLI.
-- [docs/SIDELOAD_AND_TEST_GUIDE.md](file:///home/antblu/Github/tizen-overlay/docs/SIDELOAD_AND_TEST_GUIDE.md) — Tizen Studio setup, Developer Mode, Samsung certificate + DUID signing, and Step 1 test procedure.
-- [docs/FIRMWARE_TEST_RECORD.md](file:///home/antblu/Github/tizen-overlay/docs/FIRMWARE_TEST_RECORD.md) — Record template for G65B firmware, `VIDEOSOURCE` output, and display-mode pass/fail.
-- [docs/STEALTH_SCREENSHOTS_INTEGRATION.md](file:///home/antblu/Github/tizen-overlay/docs/STEALTH_SCREENSHOTS_INTEGRATION.md) — Step 2 producer wiring options (existing endpoint vs. `stealth-screenshots` bounded response parser + relay) and Step 3 verification checklist.
+- [test-app/](test-app/) — **Step 1** minimal diagnostic Tizen TV Web app (`tv.window` + `VIDEOSOURCE` inspector) to verify live DisplayPort (or HDMI) `MAIN` `BEHIND` video and mode preservation before running the full overlay.
+- [overlay-app/](overlay-app/) — **Steps 2 & 3** transparent Tizen TV Web overlay app with configurable HTTPS read URL, read-only bearer credential, 2-second polling with duplicate-ID skip, exponential backoff, stale banner, plain-text wrapping, remote toggle, and clean `Return` exit.
+- [server/relay_server.py](server/relay_server.py) — Small authenticated HTTPS relay endpoint (`GET /latest` with read-only token, `POST /publish` with producer token, CORS + `Cache-Control: no-store`).
+- [tests/test_relay_server.py](tests/test_relay_server.py) — Unit & TLS integration tests for `relay_server.py`.
+- [scripts/package-app.ps1](scripts/package-app.ps1) — PowerShell helper to build, sign, install, and launch either `test-app` or `overlay-app` via Tizen Studio CLI.
+- [docs/SIDELOAD_AND_TEST_GUIDE.md](docs/SIDELOAD_AND_TEST_GUIDE.md) — Tizen Studio setup, Developer Mode, Samsung certificate + DUID signing, and Step 1 test procedure.
+- [docs/FIRMWARE_TEST_RECORD.md](docs/FIRMWARE_TEST_RECORD.md) — Record template for G65B firmware, `VIDEOSOURCE` output, and display-mode pass/fail.
+- [docs/STEALTH_SCREENSHOTS_INTEGRATION.md](docs/STEALTH_SCREENSHOTS_INTEGRATION.md) — Step 2 producer wiring options (existing endpoint vs. `stealth-screenshots` bounded response parser + relay) and Step 3 verification checklist.
 
 ## Workflow
 

@@ -1,5 +1,11 @@
 dist/
 *.wgt
+*.p12
+*.pwd
+*.pem
+*.key
+*.crt
+profiles.xml
 .DS_Store
 __pycache__/
 *.pyc

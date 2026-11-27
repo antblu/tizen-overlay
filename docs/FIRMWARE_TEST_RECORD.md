@@ -1,6 +1,6 @@
 # Odyssey G65B Firmware & DisplayPort Test Record
 
-Complete this record after running [test-app](file:///home/antblu/Github/tizen-overlay/test-app) on the physical monitor.
+Complete this record after running [test-app](../test-app/) on the physical monitor.
 
 ## Device Info
 

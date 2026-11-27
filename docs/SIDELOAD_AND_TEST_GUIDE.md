@@ -1,6 +1,6 @@
 # Step 1: Sideload & DisplayPort Verification Guide (Odyssey G65B)
 
-This guide covers signing, sideloading, and verifying [test-app/](file:///home/antblu/Github/tizen-overlay/test-app) on a Samsung Odyssey G65B before building the LLM overlay integration.
+This guide covers signing, sideloading, and verifying [test-app/](../test-app/) on a Samsung Odyssey G65B before building the LLM overlay integration.
 
 ## 1. Prerequisites on Windows / Tizen Studio
 
@@ -10,7 +10,7 @@ Your Tizen Studio installation at `C:\tizen-studio` currently has the base Web C
 2. Under **Extension SDK**, install:
    - **Samsung Certificate Extension**
    - **TV Extensions** (match the Tizen version on your G65B, or install the latest available TV Extensions image/SDK tools).
-3. Record your monitor's exact model code and firmware version in [FIRMWARE_TEST_RECORD.md](file:///home/antblu/Github/tizen-overlay/docs/FIRMWARE_TEST_RECORD.md):
+3. Record your monitor's exact model code and firmware version in [FIRMWARE_TEST_RECORD.md](FIRMWARE_TEST_RECORD.md):
    - On the G65B: **Settings → Support → About This TV** (or **Contact Samsung**).
 
 ## 2. Enable Developer Mode & Connect Over LAN
@@ -94,7 +94,7 @@ If DisplayPort video does not appear behind the HTML or `setSource` rejects/miss
 2. Repeat steps B and C on HDMI (`type: "HDMI"`) to verify whether `tv.window` + `BEHIND` works on HDMI on your firmware.
 
 ### E. Pass Condition
-Record results in [FIRMWARE_TEST_RECORD.md](file:///home/antblu/Github/tizen-overlay/docs/FIRMWARE_TEST_RECORD.md). Step 1 passes **only** if:
+Record results in [FIRMWARE_TEST_RECORD.md](FIRMWARE_TEST_RECORD.md). Step 1 passes **only** if:
 1. Live DisplayPort moving video and the fixed HTML text label appear simultaneously.
 2. The behavior survives closing (`Return` / `[7]`) and reopening the app.
 3. Resolution, refresh rate, VRR, HDR, and audio match your normal DisplayPort requirements (if the app drops VRR, HDR, refresh rate, or audio you need, treat Step 1 as **FAIL**).

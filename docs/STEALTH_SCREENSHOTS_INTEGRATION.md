@@ -1,6 +1,6 @@
 # Step 2 Integration Guide: Connecting Producer Output to the Overlay
 
-There are two ways to feed the Tizen overlay app in [overlay-app/](file:///home/antblu/Github/tizen-overlay/overlay-app):
+There are two ways to feed the Tizen overlay app in [overlay-app/](../overlay-app/):
 
 ## Option A: Your Custom LLM Endpoint Already Exposes Latest Output
 
@@ -21,11 +21,11 @@ If your custom endpoint already exposes an authenticated HTTPS `GET` route retur
 
 ## Option B: Use the Relay Server + Add a Bounded Response Parser to `stealth-screenshots`
 
-Right now, [winhttp_client.cpp](file:///home/antblu/Github/stealth-screenshots/src/win/winhttp_client.cpp) drains and discards 2xx response bodies, and [api_contract.hpp](file:///home/antblu/Github/stealth-screenshots/src/core/api_contract.hpp) `ApiResponse` has no response body field.
+Right now, `src/win/winhttp_client.cpp` in `stealth-screenshots` drains and discards 2xx response bodies, and `ApiResponse` in `src/core/api_contract.hpp` has no response body field.
 
 If you need `stealth-screenshots` to forward the LLM text to the monitor:
 
-1. **Run the relay server ([relay_server.py](file:///home/antblu/Github/tizen-overlay/server/relay_server.py)) behind a trusted HTTPS certificate:**
+1. **Run the relay server ([relay_server.py](../server/relay_server.py)) behind a trusted HTTPS certificate:**
    - **Important Tizen TLS note:** Samsung Tizen TV browsers/widgets verify TLS against the TV's system CA store and generally reject untrusted self-signed certificates on `fetch()` without throwing a bypass prompt. Place `relay_server.py` behind a reverse proxy with a publicly trusted or Tailscale/Let's Encrypt certificate (e.g., Caddy, Nginx, or `tailscale serve`), or serve TLS directly with a trusted cert.
    - Start with separate tokens:
      ```bash
@@ -36,9 +36,9 @@ If you need `stealth-screenshots` to forward the LLM text to the monitor:
      *(Use `--allow-insecure-http` only behind a local TLS-terminating reverse proxy like Caddy/Nginx/`tailscale serve`, or pass `--tls-cert` and `--tls-key` directly.)*
 
 2. **Extend `stealth-screenshots` (Windows producer):**
-   - In `ApiResponse` ([api_contract.hpp](file:///home/antblu/Github/stealth-screenshots/src/core/api_contract.hpp)): add an optional bounded `std::string response_text` (e.g. capped at 64 KiB while reading in `WinHttpApiClient::send_screenshot`).
+   - In `ApiResponse` (`src/core/api_contract.hpp`): add an optional bounded `std::string response_text` (e.g. capped at 64 KiB while reading in `WinHttpApiClient::send_screenshot`).
    - Add a small bounded JSON extractor for the custom LLM response text (e.g., extracting `choices[0].message.content` or `text` without logging the content to disk).
-   - On `2xx` in `SessionController::run_loop` ([session_controller.cpp](file:///home/antblu/Github/stealth-screenshots/src/core/session_controller.cpp)), `POST` `{ "text": "<parsed_text>" }` with the producer token (`Authorization: Bearer <OVERLAY_PRODUCER_TOKEN>`) to `https://<your-relay>/publish` asynchronously or right after parsing.
+   - On `2xx` in `SessionController::run_loop` (`src/core/session_controller.cpp`), `POST` `{ "text": "<parsed_text>" }` with the producer token (`Authorization: Bearer <OVERLAY_PRODUCER_TOKEN>`) to `https://<your-relay>/publish` asynchronously or right after parsing.
 
 ## Step 3 Verification Checklist (Once Sideloaded)
 
